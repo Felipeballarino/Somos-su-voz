@@ -3,25 +3,117 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --orange: #E8891A;
+  --orange-light: #F5A94A;
+  --orange-dark: #C4720F;
+  --green: #5C6B2E;
+  --green-light: #7A8A3A;
+  --cream: #FAF6EE;
+  --cream-dark: #EDE6D4;
+  --brand-dark: #2C2B1E;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cream);
+  color: var(--brand-dark);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  /* Cards */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-cream-dark/50;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer;
+    background-color: var(--orange);
+  }
+  .btn-primary:hover {
+    background-color: var(--orange-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(232, 137, 26, 0.35);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 cursor-pointer border-2;
+    color: var(--green);
+    border-color: var(--green);
+    background: transparent;
+  }
+  .btn-secondary:hover {
+    background-color: var(--green);
+    color: white;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 cursor-pointer border-2 border-white text-white;
+  }
+  .btn-outline:hover {
+    background-color: white;
+    color: var(--green);
+  }
+
+  /* Inputs */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl bg-cream border border-cream-darker text-brand-dark placeholder-brand-dark/40 outline-none transition-all duration-200;
+  }
+  .input-field:focus {
+    @apply border-orange bg-white;
+    box-shadow: 0 0 0 3px rgba(232, 137, 26, 0.12);
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-orange {
+    @apply badge bg-orange/10 text-orange-dark;
+  }
+  .badge-green {
+    @apply badge bg-green/10 text-green-dark;
+  }
+
+  /* Section headers */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-brand-dark;
+  }
+  .section-subtitle {
+    @apply text-lg text-brand-dark/60 mt-3;
+  }
+
+  /* Divider with paw */
+  .paw-divider {
+    @apply flex items-center gap-4 my-2;
+  }
+  .paw-divider::before,
+  .paw-divider::after {
+    content: '';
+    @apply flex-1 h-px bg-cream-darker;
+  }
+
+  /* Tab active/inactive */
+  .tab-active {
+    @apply font-bold text-white rounded-xl px-6 py-3 transition-all duration-200;
+    background-color: var(--orange);
+  }
+  .tab-inactive {
+    @apply font-medium rounded-xl px-6 py-3 transition-all duration-200;
+    color: var(--brand-dark);
+  }
+  .tab-inactive:hover {
+    background-color: var(--cream-dark);
   }
 }
