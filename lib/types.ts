@@ -43,6 +43,20 @@ export interface AnimalMedia {
   order_index: number
 }
 
+export interface AppSettings {
+  whatsapp_number: string
+  bank_alias: string | null
+  cbu: string | null
+}
+
+export interface BankAccount {
+  id: string
+  owner_name: string
+  alias: string | null
+  cbu: string | null
+  order_index: number
+}
+
 export function getAgeText(years: number, months: number): string {
   if (years === 0 && months === 0) return 'Recién nacido'
   if (years === 0) return `${months} ${months === 1 ? 'mes' : 'meses'}`
@@ -79,4 +93,9 @@ export function buildWhatsAppMessage(animal: Animal): string {
     `*${species}* · ${animal.breed ?? 'Raza mixta'} · ${age}\n` +
     `*Sexo:* ${gender} · *Tamaño:* ${size}\n\n` +
     `¿Podés darme más información sobre ${animal.name}?`
+}
+
+export function buildWhatsAppUrl(phone: string, animal: Animal): string {
+  const message = encodeURIComponent(buildWhatsAppMessage(animal))
+  return `https://wa.me/${phone}?text=${message}`
 }

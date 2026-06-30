@@ -120,13 +120,14 @@ export default function AdminForm() {
         const file = files[i]
         const path = await uploadMedia(animal.id, file)
         const url = getPublicUrl(path)
-        await supabase.from('animal_media').insert({
+        const { error: mediaError } = await supabase.from('animal_media').insert({
           animal_id: animal.id,
           url,
           type: file.type.startsWith('video/') ? 'video' : 'photo',
           is_primary: i === 0,
           order_index: i,
         })
+        if (mediaError) throw mediaError
       }
 
       toast.success(`¡${form.name} fue publicado! 🐾`)
@@ -135,7 +136,8 @@ export default function AdminForm() {
       setStep(1)
     } catch (err) {
       console.error(err)
-      toast.error('Ocurrió un error. Intentá de nuevo.')
+      const message = err instanceof Error ? err.message : 'Ocurrió un error. Intentá de nuevo.'
+      toast.error(message)
     } finally {
       setLoading(false)
     }

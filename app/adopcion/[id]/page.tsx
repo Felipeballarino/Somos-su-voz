@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { supabase, getSettings } from '@/lib/supabase'
 import {
   Animal,
   getAgeText,
@@ -11,18 +11,22 @@ import {
   getSpeciesText,
 } from '@/lib/types'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import AnimalGallery from '@/components/AnimalGallery'
 
 interface PageProps {
   params: { id: string }
 }
 
 export default async function AnimalDetailPage({ params }: PageProps) {
-  const { data } = await supabase
-    .from('animals')
-    .select('*, media:animal_media(*)')
-    .eq('id', params.id)
-    .eq('is_available', true)
-    .single()
+  const [{ data }, settings] = await Promise.all([
+    supabase
+      .from('animals')
+      .select('*, media:animal_media(*)')
+      .eq('id', params.id)
+      .eq('is_available', true)
+      .single(),
+    getSettings(),
+  ])
 
   if (!data) notFound()
 
@@ -30,7 +34,12 @@ export default async function AnimalDetailPage({ params }: PageProps) {
   const photos = animal.media
     ?.filter((m) => m.type === 'photo')
     .sort((a, b) => a.order_index - b.order_index) ?? []
+  const videos = animal.media
+    ?.filter((m) => m.type === 'video')
+    .sort((a, b) => a.order_index - b.order_index) ?? []
   const primaryPhoto = photos.find((m) => m.is_primary) ?? photos[0]
+  const restPhotos = photos.filter((p) => p.id !== primaryPhoto?.id)
+  const galleryMedia = primaryPhoto ? [primaryPhoto, ...restPhotos, ...videos] : [...photos, ...videos]
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-10">
@@ -44,35 +53,7 @@ export default async function AnimalDetailPage({ params }: PageProps) {
 
       <div className="grid md:grid-cols-2 gap-10">
         {/* ── Galería ── */}
-        <div className="space-y-3">
-          <div className="aspect-square rounded-2xl overflow-hidden bg-cream-dark">
-            {primaryPhoto ? (
-              <img
-                src={primaryPhoto.url}
-                alt={animal.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-8xl opacity-20">
-                {animal.species === 'dog' ? '🐶' : '🐱'}
-              </div>
-            )}
-          </div>
-
-          {photos.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {photos.slice(1, 5).map((photo) => (
-                <div key={photo.id} className="aspect-square rounded-xl overflow-hidden bg-cream-dark">
-                  <img
-                    src={photo.url}
-                    alt={animal.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <AnimalGallery media={galleryMedia} animalName={animal.name} species={animal.species} />
 
         {/* ── Info ── */}
         <div className="space-y-6">
@@ -158,7 +139,7 @@ export default async function AnimalDetailPage({ params }: PageProps) {
           </div>
 
           {/* WhatsApp */}
-          <WhatsAppButton animal={animal} className="w-full justify-center text-base py-4" />
+          <WhatsAppButton animal={animal} phone={settings.whatsapp_number} className="w-full justify-center text-base py-4" />
 
           <p className="text-xs text-center text-brand-dark/40">
             Al hacer clic vas a contactar directamente al rescatista por WhatsApp

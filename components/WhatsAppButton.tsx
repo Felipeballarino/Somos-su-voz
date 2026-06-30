@@ -1,16 +1,16 @@
 'use client'
 
-import { Animal, buildWhatsAppMessage } from '@/lib/types'
+import { Animal, buildWhatsAppUrl } from '@/lib/types'
 
 interface WhatsAppButtonProps {
   animal: Animal
+  phone: string
   className?: string
 }
 
-export default function WhatsAppButton({ animal, className }: WhatsAppButtonProps) {
+export default function WhatsAppButton({ animal, phone, className }: WhatsAppButtonProps) {
   const handleClick = () => {
-    const message = encodeURIComponent(buildWhatsAppMessage(animal))
-    window.open(`https://wa.me/${animal.rescuer_phone}?text=${message}`, '_blank')
+    window.open(buildWhatsAppUrl(phone, animal), '_blank')
   }
 
   return (

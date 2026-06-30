@@ -35,10 +35,35 @@ create table if not exists animal_media (
   created_at    timestamptz not null default now()
 );
 
+-- Tabla de configuración global (fila única)
+create table if not exists app_settings (
+  id              boolean primary key default true,
+  whatsapp_number text not null default '',
+  bank_alias      text,
+  cbu             text,
+  updated_at      timestamptz not null default now(),
+  constraint app_settings_singleton check (id)
+);
+
+insert into app_settings (id, whatsapp_number, bank_alias, cbu)
+values (true, '', null, null)
+on conflict (id) do nothing;
+
+-- Tabla de cuentas bancarias para donaciones (alias/CBU, puede haber varias)
+create table if not exists bank_accounts (
+  id           uuid primary key default gen_random_uuid(),
+  owner_name   text not null,
+  alias        text,
+  cbu          text,
+  order_index  int not null default 0,
+  created_at   timestamptz not null default now()
+);
+
 -- Índices
 create index if not exists animals_species_idx on animals(species);
 create index if not exists animals_available_idx on animals(is_available);
 create index if not exists animal_media_animal_id_idx on animal_media(animal_id);
+create index if not exists bank_accounts_order_idx on bank_accounts(order_index);
 
 -- ============================================================
 -- Row Level Security
@@ -46,11 +71,19 @@ create index if not exists animal_media_animal_id_idx on animal_media(animal_id)
 
 alter table animals enable row level security;
 alter table animal_media enable row level security;
+alter table app_settings enable row level security;
+alter table bank_accounts enable row level security;
 
 -- Lectura pública de animales disponibles
 create policy "Lectura pública de animales disponibles"
   on animals for select
   using (is_available = true);
+
+-- El admin necesita ver también los no disponibles (adoptados/devueltos)
+create policy "Lectura completa autenticados"
+  on animals for select
+  to authenticated
+  using (true);
 
 -- Lectura pública de media
 create policy "Lectura pública de media"
@@ -70,6 +103,46 @@ create policy "Insertar media autenticados"
 
 create policy "Actualizar animales propios"
   on animals for update
+  to authenticated
+  using (true);
+
+create policy "Actualizar media autenticados"
+  on animal_media for update
+  to authenticated
+  using (true);
+
+create policy "Eliminar media autenticados"
+  on animal_media for delete
+  to authenticated
+  using (true);
+
+-- Configuración global: lectura pública, escritura autenticada
+create policy "Lectura pública de configuración"
+  on app_settings for select
+  using (true);
+
+create policy "Actualizar configuración autenticados"
+  on app_settings for update
+  to authenticated
+  using (true);
+
+-- Cuentas bancarias: lectura pública, escritura autenticada
+create policy "Lectura pública de cuentas bancarias"
+  on bank_accounts for select
+  using (true);
+
+create policy "Insertar cuentas bancarias autenticados"
+  on bank_accounts for insert
+  to authenticated
+  with check (true);
+
+create policy "Actualizar cuentas bancarias autenticados"
+  on bank_accounts for update
+  to authenticated
+  using (true);
+
+create policy "Eliminar cuentas bancarias autenticados"
+  on bank_accounts for delete
   to authenticated
   using (true);
 
@@ -105,6 +178,12 @@ create policy "Subida autenticada"
   on storage.objects for insert
   to authenticated
   with check (bucket_id = 'animal-media');
+
+-- Política de borrado para autenticados (editar/eliminar fotos)
+create policy "Eliminar storage autenticados"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'animal-media');
 
 -- ============================================================
 -- Datos de ejemplo

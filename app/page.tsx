@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { supabase, getBankAccounts, getSettings } from '@/lib/supabase'
 import { Animal, getPrimaryPhoto } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -16,7 +16,11 @@ async function getRecentAnimals(): Promise<Animal[]> {
 }
 
 export default async function HomePage() {
-  const recentAnimals = await getRecentAnimals()
+  const [recentAnimals, bankAccounts, settings] = await Promise.all([
+    getRecentAnimals(),
+    getBankAccounts(),
+    getSettings(),
+  ])
 
   return (
     <main>
@@ -172,19 +176,22 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── DONAR ALIMENTOS ───────────────────────────────────── */}
+      {/* ── DONÁ ──────────────────────────────────────────────── */}
       <section id="donar" className="py-16" style={{ background: 'var(--cream-dark)' }}>
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-14 items-center">
-            {/* Texto */}
-            <div>
-              <p className="text-orange font-semibold text-sm uppercase tracking-widest mb-3">Colaborá con nosotros</p>
-              <h2 className="section-title mb-6">Doná alimentos</h2>
-              <p className="text-brand-dark/70 leading-relaxed mb-8">
+          <div className="text-center mb-12">
+            <p className="text-orange font-semibold text-sm uppercase tracking-widest mb-3">Colaborá con nosotros</p>
+            <h2 className="section-title">Doná</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-10 items-start">
+            {/* Doná alimentos */}
+            <div className="card p-6 md:p-8 h-full flex flex-col">
+              <h3 className="text-xl font-bold text-brand-dark mb-4">Doná alimentos</h3>
+              <p className="text-brand-dark/70 leading-relaxed mb-6">
                 Los animales que rescatamos necesitan alimento todos los días mientras esperan su familia adoptiva.
                 Podés acercarnos alimento balanceado para perros y gatos — adultos o cachorros. Cualquier aporte hace la diferencia.
               </p>
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-cream-darker">
                   <span className="text-xl">🐶</span>
                   <div>
@@ -200,83 +207,79 @@ export default async function HomePage() {
                   </div>
                 </div>
               </div>
-              <a
-                href="https://www.instagram.com/somos.su.voz.vmvn/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-              >
-                Contactanos para coordinar
-              </a>
-            </div>
-
-            {/* Imagen circular */}
-            <div className="flex justify-center">
-              <div
-                className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-8 shadow-xl"
-                style={{ borderColor: 'var(--green)' }}
-              >
-                <Image
-                  src="/assets/perrito2.jpg"
-                  alt="Doná alimentos"
-                  fill
-                  className="object-cover"
-                  sizes="320px"
-                />
+              <div className="flex flex-wrap gap-3 mt-auto">
+                <a
+                  href="https://www.instagram.com/somos.su.voz.vmvn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary self-start"
+                >
+                  Escribinos por Instagram
+                </a>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── DONAR DINERO ──────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-14 items-center">
-          {/* Imagen circular */}
-          <div className="flex justify-center">
-            <div
-              className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-8 shadow-xl"
-              style={{ borderColor: 'var(--orange)' }}
-            >
-              <Image
-                src="/assets/gatito.jpg"
-                alt="Doná dinero"
-                fill
-                className="object-cover"
-                sizes="320px"
-              />
-            </div>
-          </div>
+            {/* Doná dinero */}
+            <div className="card p-6 md:p-8 h-full flex flex-col">
+              <h3 className="text-xl font-bold text-brand-dark mb-4">Doná dinero</h3>
+              <p className="text-brand-dark/70 leading-relaxed mb-6">
+                Tu aporte económico nos ayuda a pagar vacunas, castración, antiparasitarios y emergencias
+                veterinarias de los animales que rescatamos. Cada peso cuenta y se destina al cuidado de quienes más lo necesitan.
+              </p>
 
-          {/* Texto */}
-          <div>
-            <p className="text-orange font-semibold text-sm uppercase tracking-widest mb-3">Sumate económicamente</p>
-            <h2 className="section-title mb-6">Doná dinero</h2>
-            <p className="text-brand-dark/70 leading-relaxed mb-8">
-              Tu aporte económico nos ayuda a pagar vacunas, castración, antiparasitarios y emergencias
-              veterinarias de los animales que rescatamos. Cada peso cuenta y se destina al cuidado de quienes más lo necesitan.
-            </p>
-            <div className="p-5 bg-cream rounded-2xl border border-cream-darker mb-8">
-              <p className="text-xs font-semibold text-brand-dark/50 uppercase tracking-wider mb-4">Datos bancarios</p>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-brand-dark/50">CBU</span>
-                  <span className="font-mono font-medium text-brand-dark">— próximamente —</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-brand-dark/50">Alias</span>
-                  <span className="font-mono font-medium text-brand-dark">— próximamente —</span>
-                </div>
+              <div className="space-y-3 mb-6">
+                {bankAccounts.length > 0 ? (
+                  bankAccounts.map((account) => (
+                    <div key={account.id} className="p-4 bg-cream rounded-2xl border border-cream-darker">
+                      <p className="text-xs font-semibold text-brand-dark/50 uppercase tracking-wider mb-3">
+                        {account.owner_name}
+                      </p>
+                      <div className="space-y-2 text-sm">
+                        {account.cbu && (
+                          <div className="flex justify-between items-center gap-3">
+                            <span className="text-brand-dark/50">CBU</span>
+                            <span className="font-mono font-medium text-brand-dark text-right break-all">{account.cbu}</span>
+                          </div>
+                        )}
+                        {account.alias && (
+                          <div className="flex justify-between items-center gap-3">
+                            <span className="text-brand-dark/50">Alias</span>
+                            <span className="font-mono font-medium text-brand-dark text-right break-all">{account.alias}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 bg-cream rounded-2xl border border-cream-darker text-sm text-brand-dark/50">
+                    — próximamente —
+                    </div>
+                )}
+
+                {settings.whatsapp_number && (
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-cream-darker">
+                    <span className="text-xl">💵</span>
+                    <div>
+                      <p className="font-semibold text-sm text-brand-dark">Efectivo</p>
+                      <p className="text-xs text-brand-dark/50">Coordiná la entrega por WhatsApp</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-auto">
+                {settings.whatsapp_number && (
+                  <a
+                    href={`https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent('Hola! Quiero hacer una donación en efectivo, ¿cómo coordinamos?')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary self-start"
+                  >
+                    Coordinar por WhatsApp
+                  </a>
+                )}
               </div>
             </div>
-            <a
-              href="https://www.instagram.com/somos.su.voz.vmvn/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-            >
-              Escribinos por Instagram
-            </a>
           </div>
         </div>
       </section>

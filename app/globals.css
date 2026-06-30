@@ -49,13 +49,13 @@ body {
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 cursor-pointer border-2;
-    color: var(--green);
+    color: white;
     border-color: var(--green);
-    background: transparent;
+    background-color: var(--green);
   }
   .btn-secondary:hover {
-    background-color: var(--green);
-    color: white;
+    background-color: white;
+    color: var(--green);
   }
 
   .btn-outline {

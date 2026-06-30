@@ -3,7 +3,17 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import AdminForm from '@/components/AdminForm'
+import AdminAnimalList from '@/components/AdminAnimalList'
+import AdminSettingsForm from '@/components/AdminSettingsForm'
 import type { User } from '@supabase/supabase-js'
+
+const TABS = [
+  { id: 'create', label: 'Cargar animal' },
+  { id: 'animals', label: 'Mis animales' },
+  { id: 'settings', label: 'Configuración' },
+] as const
+
+type TabId = (typeof TABS)[number]['id']
 
 export default function AdminPage() {
   const [user, setUser] = useState<User | null>(null)
@@ -12,6 +22,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [logging, setLogging] = useState(false)
+  const [tab, setTab] = useState<TabId>('create')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -96,7 +107,7 @@ export default function AdminPage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-brand-dark">Panel de carga</h1>
           <p className="text-sm text-brand-dark/50 mt-1">{user.email}</p>
@@ -109,7 +120,24 @@ export default function AdminPage() {
         </button>
       </div>
 
-      <AdminForm />
+      <div className="flex gap-2 mb-10 border-b border-cream-darker">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${tab === t.id
+                ? 'border-orange text-orange'
+                : 'border-transparent text-brand-dark/50 hover:text-brand-dark'
+              }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'create' && <AdminForm />}
+      {tab === 'animals' && <AdminAnimalList />}
+      {tab === 'settings' && <AdminSettingsForm />}
     </main>
   )
 }

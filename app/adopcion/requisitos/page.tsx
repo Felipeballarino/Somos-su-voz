@@ -19,6 +19,7 @@ const ageCategories = [
       'Come con mayor frecuencia',
       'Puede hacer destrozos',
       'Llora de noche si está solo',
+      'Todavía no sabe hacer sus necesidades afuera',
       'Necesita castración obligatoria entre los 6 y 12 meses',
     ],
   },
