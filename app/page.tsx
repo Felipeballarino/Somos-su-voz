@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getBankAccounts, getSettings } from '@/lib/supabase'
 import { Animal, getPrimaryPhoto } from '@/lib/types'
+import TeamSection from '@/components/TeamSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -283,6 +284,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── QUIÉNES SOMOS ─────────────────────────────────────── */}
+      <TeamSection />
 
       {/* ── CTA FINAL ─────────────────────────────────────────── */}
       <section className="py-20" style={{ background: 'linear-gradient(135deg, #E8891A 0%, #C4720F 100%)' }}>
