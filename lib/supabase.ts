@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { AppSettings, BankAccount } from './types'
+import { AppSettings, BankAccount, FosterRequest, FosterStatus } from './types'
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'https://placeholder.supabase.co',
@@ -50,4 +50,22 @@ export async function uploadMedia(
 export function getPublicUrl(path: string): string {
   const { data } = supabase.storage.from('animal-media').getPublicUrl(path)
   return data.publicUrl
+}
+
+// ── Hogares de tránsito ──────────────────────────────────────
+
+export async function getFosterRequests(): Promise<FosterRequest[]> {
+  const { data } = await supabase
+    .from('foster_requests')
+    .select('*')
+    .order('created_at', { ascending: false })
+  return (data as FosterRequest[]) ?? []
+}
+
+export async function updateFosterStatus(id: string, status: FosterStatus): Promise<void> {
+  await supabase.from('foster_requests').update({ status }).eq('id', id)
+}
+
+export async function deleteFosterRequest(id: string): Promise<void> {
+  await supabase.from('foster_requests').delete().eq('id', id)
 }

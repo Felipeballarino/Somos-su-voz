@@ -5,11 +5,13 @@ import { supabase } from '@/lib/supabase'
 import AdminForm from '@/components/AdminForm'
 import AdminAnimalList from '@/components/AdminAnimalList'
 import AdminSettingsForm from '@/components/AdminSettingsForm'
+import AdminHelpRequests from '@/components/AdminHelpRequests'
 import type { User } from '@supabase/supabase-js'
 
 const TABS = [
   { id: 'create', label: 'Cargar animal' },
   { id: 'animals', label: 'Mis animales' },
+  { id: 'requests', label: 'Tránsitos 🏠' },
   { id: 'settings', label: 'Configuración' },
 ] as const
 
@@ -106,7 +108,7 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-12">
+    <main className="max-w-4xl mx-auto px-4 py-12">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-brand-dark">Panel de carga</h1>
@@ -135,8 +137,9 @@ export default function AdminPage() {
         ))}
       </div>
 
-      {tab === 'create' && <AdminForm />}
-      {tab === 'animals' && <AdminAnimalList />}
+      {tab === 'create'   && <AdminForm />}
+      {tab === 'animals'  && <AdminAnimalList />}
+      {tab === 'requests' && <AdminHelpRequests />}
       {tab === 'settings' && <AdminSettingsForm />}
     </main>
   )

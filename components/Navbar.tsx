@@ -15,6 +15,7 @@ const links = [
       { href: '/adopcion/requisitos', label: '📋 Requisitos' },
     ],
   },
+  { href: '/ayudar', label: 'Ayudar' },
   { href: '/#donar', label: 'Donar' },
   { href: '/#contacto', label: 'Contacto' },
 ]

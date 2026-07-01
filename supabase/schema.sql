@@ -189,6 +189,86 @@ create policy "Eliminar storage autenticados"
 -- Datos de ejemplo
 -- ============================================================
 
+-- ============================================================
+-- Formularios de ayuda voluntaria
+-- ============================================================
+
+create type help_status as enum ('pending', 'in_progress', 'resolved');
+
+-- Provisorios: personas que ofrecen hogar transitorio
+create table if not exists foster_requests (
+  id                 uuid primary key default gen_random_uuid(),
+  contact_name       text not null,
+  contact_phone      text not null,
+  address            text not null,
+  has_other_pets     boolean not null default false,
+  has_outdoor_space  boolean not null default false,
+  availability       text not null,
+  notes              text,
+  status             help_status not null default 'pending',
+  created_at         timestamptz not null default now()
+);
+
+-- Traslados: personas que ofrecen llevar animales de un lugar a otro
+create table if not exists transport_requests (
+  id                  uuid primary key default gen_random_uuid(),
+  contact_name        text not null,
+  contact_phone       text not null,
+  origin              text not null,
+  destination         text not null,
+  requested_date      text not null,
+  animal_description  text,
+  notes               text,
+  status              help_status not null default 'pending',
+  created_at          timestamptz not null default now()
+);
+
+-- Fotos: personas que ofrecen sacar fotos a los animales rescatados
+create table if not exists photo_requests (
+  id                  uuid primary key default gen_random_uuid(),
+  contact_name        text not null,
+  contact_phone       text not null,
+  address             text not null,
+  availability        text not null,
+  has_own_camera      boolean not null default false,
+  animal_description  text,
+  notes               text,
+  status              help_status not null default 'pending',
+  created_at          timestamptz not null default now()
+);
+
+-- Índices
+create index if not exists foster_requests_status_idx    on foster_requests(status);
+create index if not exists transport_requests_status_idx on transport_requests(status);
+create index if not exists photo_requests_status_idx     on photo_requests(status);
+
+-- RLS
+alter table foster_requests    enable row level security;
+alter table transport_requests enable row level security;
+alter table photo_requests     enable row level security;
+
+-- Cualquiera puede enviar una solicitud (formulario público)
+create policy "Insertar foster público"    on foster_requests    for insert with check (true);
+create policy "Insertar transport público" on transport_requests for insert with check (true);
+create policy "Insertar photo público"     on photo_requests     for insert with check (true);
+
+-- Solo autenticados pueden leer y gestionar las solicitudes
+create policy "Leer foster autenticado"    on foster_requests    for select to authenticated using (true);
+create policy "Leer transport autenticado" on transport_requests for select to authenticated using (true);
+create policy "Leer photo autenticado"     on photo_requests     for select to authenticated using (true);
+
+create policy "Actualizar foster autenticado"    on foster_requests    for update to authenticated using (true);
+create policy "Actualizar transport autenticado" on transport_requests for update to authenticated using (true);
+create policy "Actualizar photo autenticado"     on photo_requests     for update to authenticated using (true);
+
+create policy "Eliminar foster autenticado"    on foster_requests    for delete to authenticated using (true);
+create policy "Eliminar transport autenticado" on transport_requests for delete to authenticated using (true);
+create policy "Eliminar photo autenticado"     on photo_requests     for delete to authenticated using (true);
+
+-- ============================================================
+-- Datos de ejemplo
+-- ============================================================
+
 insert into animals (name, species, breed, age_years, age_months, gender, size, is_vaccinated, is_sterilized, is_dewormed, rescuer_name, rescuer_phone, vaccines)
 values
   (
