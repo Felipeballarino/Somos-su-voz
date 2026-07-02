@@ -15,6 +15,7 @@ const links = [
       { href: '/adopcion/requisitos', label: '📋 Requisitos' },
     ],
   },
+  { href: '/#quienes-somos', label: 'Quiénes somos' },
   { href: '/#donar', label: 'Donar' },
   { href: '/#contacto', label: 'Contacto' },
 ]
@@ -43,13 +44,13 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 group">
           <Image
             src="/assets/logo.png"
             alt="Somos Su Voz"
             width={44}
             height={44}
-            className="object-contain"
+            className="object-contain transition-transform duration-300 group-hover:animate-wiggle"
           />
           <div className="hidden sm:block">
             <p className="text-sm font-bold leading-tight" style={{ color: 'var(--green)' }}>

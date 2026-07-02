@@ -87,7 +87,7 @@ export default function AdopcionPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-24">
-          <div className="text-6xl mb-4">{tab === 'dog' ? '🐶' : '🐱'}</div>
+          <div className="text-6xl mb-4 animate-float-paw inline-block">{tab === 'dog' ? '🐶' : '🐱'}</div>
           <h3 className="text-xl font-semibold text-brand-dark/60 mb-2">
             No hay {tab === 'dog' ? 'perros' : 'gatos'} disponibles ahora
           </h3>
