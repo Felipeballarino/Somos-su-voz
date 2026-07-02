@@ -34,6 +34,9 @@ const config: Config = {
       animation: {
         'fade-up': 'fadeUp 0.5s ease-out',
         'fade-in': 'fadeIn 0.4s ease-out',
+        'wiggle': 'wiggle 0.6s ease-in-out infinite',
+        'float-paw': 'floatPaw 6s ease-in-out infinite',
+        'pop-in': 'popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
       keyframes: {
         fadeUp: {
@@ -43,6 +46,18 @@ const config: Config = {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-4deg)' },
+          '50%': { transform: 'rotate(4deg)' },
+        },
+        floatPaw: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-14px) rotate(8deg)' },
+        },
+        popIn: {
+          '0%': { opacity: '0', transform: 'scale(0.85)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
     },
