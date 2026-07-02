@@ -33,6 +33,30 @@ body {
     @apply card transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
   }
 
+  /* Card jugueton: "salta" un toque al pasar el mouse (combinar con hover:rotate-1 / hover:-rotate-1 para inclinarla) */
+  .card-tilt {
+    @apply card transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lg;
+  }
+
+  /* Marco tipo sticker/polaroid para fotos */
+  .sticker-frame {
+    @apply bg-white p-2 rounded-2xl shadow-lg border-4 border-white transition-transform duration-300;
+  }
+  .sticker-frame:hover {
+    transform: rotate(0deg) scale(1.03);
+  }
+
+  /* Textura sutil de patitas de fondo */
+  .paw-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%232C2B1E' fill-opacity='0.06'%3E%3Cellipse cx='40' cy='48' rx='11' ry='9'/%3E%3Cellipse cx='27' cy='30' rx='5' ry='6' transform='rotate(-20 27 30)'/%3E%3Cellipse cx='40' cy='24' rx='5' ry='6.5'/%3E%3Cellipse cx='53' cy='30' rx='5' ry='6' transform='rotate(20 53 30)'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 80px 80px;
+  }
+
+  .paw-pattern-light {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.10'%3E%3Cellipse cx='40' cy='48' rx='11' ry='9'/%3E%3Cellipse cx='27' cy='30' rx='5' ry='6' transform='rotate(-20 27 30)'/%3E%3Cellipse cx='40' cy='24' rx='5' ry='6.5'/%3E%3Cellipse cx='53' cy='30' rx='5' ry='6' transform='rotate(20 53 30)'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 80px 80px;
+  }
+
   /* Buttons */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer;

@@ -27,9 +27,12 @@ export default async function HomePage() {
     <main>
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #5C6B2E 0%, #3E4A1E 100%)' }}>
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: 'radial-gradient(circle at 20% 50%, #E8891A 0%, transparent 60%), radial-gradient(circle at 80% 20%, #FAF6EE 0%, transparent 50%)',
-        }} />
+        <div className="absolute inset-0 opacity-10 paw-pattern-light" />
+
+        {/* Patitas flotando */}
+        <span className="hidden md:block absolute top-16 left-[15%] text-4xl opacity-30 animate-float-paw select-none">🐾</span>
+        <span className="hidden md:block absolute bottom-24 right-[12%] text-3xl opacity-25 animate-float-paw select-none" style={{ animationDelay: '1.5s' }}>🐾</span>
+        <span className="hidden md:block absolute top-1/2 right-[28%] text-2xl opacity-20 animate-float-paw select-none" style={{ animationDelay: '3s' }}>🐾</span>
 
         <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 text-white text-center md:text-left">
@@ -82,7 +85,7 @@ export default async function HomePage() {
             { num: '🐱', label: 'Gatos rescatados' },
             { num: '❤️', label: 'Familias felices' },
           ].map((s) => (
-            <div key={s.label} className="card text-center py-6 px-3">
+            <div key={s.label} className="card-tilt text-center py-6 px-3 cursor-default">
               <p className="text-3xl mb-2">{s.num}</p>
               <p className="text-xs text-brand-dark/50 font-medium">{s.label}</p>
             </div>
@@ -289,8 +292,10 @@ export default async function HomePage() {
       <TeamSection />
 
       {/* ── CTA FINAL ─────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: 'linear-gradient(135deg, #E8891A 0%, #C4720F 100%)' }}>
-        <div className="max-w-5xl mx-auto px-4">
+      <section className="relative overflow-hidden py-20" style={{ background: 'linear-gradient(135deg, #E8891A 0%, #C4720F 100%)' }}>
+        <div className="absolute inset-0 paw-pattern-light opacity-40" />
+        <span className="hidden md:block absolute top-10 right-[10%] text-4xl opacity-25 animate-float-paw select-none">🐾</span>
+        <div className="relative max-w-5xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="flex justify-center">
               <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-8 border-white/30 shadow-2xl flex-shrink-0">

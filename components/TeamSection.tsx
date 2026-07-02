@@ -1,23 +1,23 @@
 const team = [
   {
-    initials: 'LM',
+    initials: 'MG',
     color: '#E8891A',
-    name: 'Laura Martínez',
-    role: 'Fundadora y rescatista',
+    name: 'Maca Gonzalez',
+    role: 'Info Personal',
     bio: 'Llevo más de 8 años rescatando animales en Villa María. Mi casa siempre tiene lugar para uno más — y mi corazón, para todos.',
   },
   {
-    initials: 'VR',
+    initials: 'MG',
     color: '#5C6B2E',
-    name: 'Valentina Romero',
-    role: 'Coordinadora de adopciones',
+    name: 'Maca Gonzalez',
+    role: 'Info Personal',
     bio: 'Me encargo de que cada animal encuentre la familia perfecta. Cada historia de adopción exitosa me recuerda por qué hacemos esto.',
   },
   {
-    initials: 'SG',
+    initials: 'MG',
     color: '#C4720F',
-    name: 'Sofía García',
-    role: 'Comunicación y redes',
+    name: 'Maca Gonzalez',
+    role: 'Info personal',
     bio: 'Cuento las historias de nuestros rescatados para que lleguen a las personas que los están esperando sin saberlo.',
   },
 ]
@@ -39,10 +39,10 @@ export default function TeamSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {team.map((member) => (
-            <div key={member.name} className="card p-8 flex flex-col items-center text-center gap-5">
+            <div key={member.name} className="card-tilt p-8 flex flex-col items-center text-center gap-5 group">
               {/* Avatar con iniciales */}
               <div
-                className="w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md"
+                className="w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md transition-transform duration-300 group-hover:animate-wiggle"
                 style={{ backgroundColor: member.color }}
               >
                 {member.initials}
