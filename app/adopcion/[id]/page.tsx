@@ -85,6 +85,14 @@ export default async function AnimalDetailPage({ params }: PageProps) {
             ))}
           </div>
 
+          {/* Historia */}
+          {animal.story && (
+            <div className="card p-5">
+              <p className="text-xs text-brand-dark/40 uppercase tracking-wider mb-3">Mi historia</p>
+              <p className="text-sm text-brand-dark/80 leading-relaxed whitespace-pre-line">{animal.story}</p>
+            </div>
+          )}
+
           {/* Salud */}
           <div>
             <p className="text-xs text-brand-dark/40 uppercase tracking-wider mb-3">Estado de salud</p>

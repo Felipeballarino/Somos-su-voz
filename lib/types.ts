@@ -30,6 +30,7 @@ export interface Animal {
   rescuer_name: string
   rescuer_phone: string
   is_available: boolean
+  story: string | null
   created_at: string
   media?: AnimalMedia[]
 }

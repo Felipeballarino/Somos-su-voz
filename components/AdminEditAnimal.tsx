@@ -101,7 +101,7 @@ export default function AdminEditAnimal({ animal, onBack, onSaved }: AdminEditAn
               !isAvailable ? 'border-orange bg-orange/5 text-brand-dark' : 'border-cream-darker bg-cream text-brand-dark/50'
             }`}
           >
-            ✅ Adoptado / devuelto
+            ✅ Adoptado
           </button>
         </div>
         <p className="text-xs text-brand-dark/40 mt-1">
