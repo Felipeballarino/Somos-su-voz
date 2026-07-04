@@ -21,6 +21,7 @@ interface FormData {
   diseases: string
   rescuer_name: string
   rescuer_phone: string
+  story: string
 }
 
 const defaultForm: FormData = {
@@ -38,6 +39,7 @@ const defaultForm: FormData = {
   diseases: '',
   rescuer_name: '',
   rescuer_phone: '',
+  story: '',
 }
 
 const STEPS = [
@@ -109,6 +111,7 @@ export default function AdminForm() {
           diseases,
           rescuer_name: form.rescuer_name,
           rescuer_phone: form.rescuer_phone,
+          story: form.story || null,
           is_available: true,
         })
         .select()
@@ -207,6 +210,17 @@ export default function AdminForm() {
                 value={form.name}
                 onChange={(e) => set('name', e.target.value)}
               />
+            </div>
+
+            <div>
+              <Label>Su historia</Label>
+              <textarea
+                className="input-field min-h-[100px] resize-none"
+                placeholder="¿De dónde fue rescatado? ¿Cómo llegó? Contá su historia para que los adoptantes lo conozcan mejor..."
+                value={form.story}
+                onChange={(e) => set('story', e.target.value)}
+              />
+              <Hint>Opcional, pero hace la diferencia</Hint>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
