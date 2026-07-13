@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getBankAccounts, getSettings } from '@/lib/supabase'
 import { Animal, getPrimaryPhoto } from '@/lib/types'
-import TeamSection from '@/components/TeamSection'
+// import TeamSection from '@/components/TeamSection'
 
 export const dynamic = 'force-dynamic'
 
