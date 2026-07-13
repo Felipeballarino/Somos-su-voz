@@ -7,11 +7,13 @@ export const supabase = createClient(
 )
 
 export async function getSettings(): Promise<AppSettings> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('app_settings')
     .select('whatsapp_number, bank_alias, cbu')
     .eq('id', true)
     .single()
+
+  if (error) console.error('getSettings error:', error.message)
 
   return data ?? { whatsapp_number: '', bank_alias: null, cbu: null }
 }
