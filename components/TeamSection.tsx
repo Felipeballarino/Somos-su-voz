@@ -1,26 +1,4 @@
-const team = [
-  {
-    initials: 'MG',
-    color: '#E8891A',
-    name: 'Maca Gonzalez',
-    role: 'Info Personal',
-    bio: 'Llevo más de 8 años rescatando animales en Villa María. Mi casa siempre tiene lugar para uno más — y mi corazón, para todos.',
-  },
-  {
-    initials: 'MG',
-    color: '#5C6B2E',
-    name: 'Maca Gonzalez',
-    role: 'Info Personal',
-    bio: 'Me encargo de que cada animal encuentre la familia perfecta. Cada historia de adopción exitosa me recuerda por qué hacemos esto.',
-  },
-  {
-    initials: 'MG',
-    color: '#C4720F',
-    name: 'Maca Gonzalez',
-    role: 'Info personal',
-    bio: 'Cuento las historias de nuestros rescatados para que lleguen a las personas que los están esperando sin saberlo.',
-  },
-]
+import Image from 'next/image'
 
 export default function TeamSection() {
   return (
@@ -31,33 +9,31 @@ export default function TeamSection() {
             Las personas detrás
           </p>
           <h2 className="section-title">Quiénes somos</h2>
-          <p className="section-subtitle max-w-xl mx-auto">
-            Somos un grupo de proteccionistas voluntarias de Villa María, Córdoba.
-            Sin fines de lucro, solo con amor y mucha dedicación.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {team.map((member) => (
-            <div key={member.name} className="card-tilt p-8 flex flex-col items-center text-center gap-5 group">
-              {/* Avatar con iniciales */}
-              <div
-                className="w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-md transition-transform duration-300 group-hover:animate-wiggle"
-                style={{ backgroundColor: member.color }}
-              >
-                {member.initials}
-              </div>
+        <div className="flex flex-col md:flex-row items-center gap-12">
+          <div className="w-full max-w-xl rounded-3xl overflow-hidden shadow-xl flex-shrink-0">
+            <Image
+              src="/assets/nosotros.jpeg"
+              alt="Equipo de Somos su Voz y Pim Pum Pam"
+              width={5230}
+              height={3487}
+              className="w-full h-auto"
+              sizes="(min-width: 768px) 576px, 100vw"
+            />
+          </div>
 
-              <div>
-                <h3 className="text-xl font-bold text-brand-dark">{member.name}</h3>
-                <p className="text-sm font-semibold mt-1" style={{ color: 'var(--orange)' }}>
-                  {member.role}
-                </p>
-              </div>
-
-              <p className="text-brand-dark/60 leading-relaxed text-sm">{member.bio}</p>
-            </div>
-          ))}
+          <div className="flex-1 space-y-5 text-center md:text-left">
+            <p className="text-brand-dark/70 leading-relaxed">
+              Somos Somos su Voz y Pim Pum Pam, un grupo de mujeres y hombres unidos por la misma
+              misión: rescatar, proteger y dar segundas oportunidades a los animales en riesgo.
+            </p>
+            <p className="text-brand-dark/70 leading-relaxed">
+              Nuestro nombre refleja nuestra forma de actuar: rápida, decidida y con mucho corazón.
+              Creemos que cada vida merece respeto, cuidados y amor, por eso trabajamos en rescates,
+              atención veterinaria y adopciones responsables.
+            </p>
+          </div>
         </div>
       </div>
     </section>

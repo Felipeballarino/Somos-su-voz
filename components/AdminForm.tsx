@@ -77,15 +77,20 @@ export default function AdminForm() {
     try {
       const processed: File[] = []
       for (const file of selected) {
-        const compressed = file.type.startsWith('image/') ? await compressImage(file) : file
-        const error = validateMediaFile(compressed)
-        if (error) {
-          toast.error(error)
-          continue
+        try {
+          const compressed = file.type.startsWith('image/') ? await compressImage(file) : file
+          const error = validateMediaFile(compressed)
+          if (error) {
+            toast.error(error)
+            continue
+          }
+          processed.push(compressed)
+        } catch (err) {
+          console.error(err)
+          toast.error(`${file.name}: no se pudo procesar el archivo`)
         }
-        processed.push(compressed)
       }
-      setFiles(processed)
+      setFiles((prev) => [...prev, ...processed])
     } finally {
       setProcessingFiles(false)
     }
@@ -143,20 +148,32 @@ export default function AdminForm() {
 
       if (animalError) throw animalError
 
+      const failedUploads: string[] = []
+      let uploadedCount = 0
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
-        const path = await uploadMedia(animal.id, file)
-        const url = getPublicUrl(path)
-        const { error: mediaError } = await supabase.from('animal_media').insert({
-          animal_id: animal.id,
-          url,
-          type: file.type.startsWith('video/') ? 'video' : 'photo',
-          is_primary: i === 0,
-          order_index: i,
-        })
-        if (mediaError) throw mediaError
+        try {
+          const path = await uploadMedia(animal.id, file)
+          const url = getPublicUrl(path)
+          const { error: mediaError } = await supabase.from('animal_media').insert({
+            animal_id: animal.id,
+            url,
+            type: file.type.startsWith('video/') ? 'video' : 'photo',
+            is_primary: uploadedCount === 0,
+            order_index: uploadedCount,
+          })
+          if (mediaError) throw mediaError
+          uploadedCount++
+        } catch (err) {
+          console.error(err)
+          failedUploads.push(file.name)
+        }
       }
 
+      if (failedUploads.length > 0) {
+        toast.error(`No se pudieron subir: ${failedUploads.join(', ')}`)
+      }
       toast.success(`¡${form.name} fue publicado! 🐾`)
       setForm(defaultForm)
       setFiles([])
