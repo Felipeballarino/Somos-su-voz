@@ -6,15 +6,15 @@ import TeamSection from '@/components/TeamSection'
 
 export const dynamic = 'force-dynamic'
 
-async function getRecentAnimals(): Promise<Animal[]> {
-  const { data } = await supabase
-    .from('animals')
-    .select('*, media:animal_media(*)')
-    .eq('is_available', true)
-    .order('created_at', { ascending: false })
-    .limit(3)
-  return (data as Animal[]) ?? []
-}
+// async function getRecentAnimals(): Promise<Animal[]> {
+//   const { data } = await supabase
+//     .from('animals')
+//     .select('*, media:animal_media(*)')
+//     .eq('is_available', true)
+//     .order('created_at', { ascending: false })
+//     .limit(3)
+//   return (data as Animal[]) ?? []
+// }
 
 export default async function HomePage() {
   const rawAnimals = await supabase
