@@ -25,6 +25,13 @@ export default async function HomePage() {
 
   return (
     <main>
+      {/* DEBUG_TEMP: {JSON.stringify({
+        url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+        keyPrefix: (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').slice(0, 20),
+        recentAnimalsCount: recentAnimals.length,
+        bankAccountsCount: bankAccounts.length,
+        settings,
+      })} */}
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #5C6B2E 0%, #3E4A1E 100%)' }}>
         <div className="absolute inset-0 opacity-10 paw-pattern-light" />
