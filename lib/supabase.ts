@@ -17,10 +17,12 @@ export async function getSettings(): Promise<AppSettings> {
 }
 
 export async function getBankAccounts(): Promise<BankAccount[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('bank_accounts')
     .select('id, owner_name, alias, cbu, order_index')
     .order('order_index', { ascending: true })
+
+  if (error) console.error('getBankAccounts error:', error.message)
 
   return data ?? []
 }

@@ -78,6 +78,15 @@ export default function AdminSettingsForm() {
         if (deleteError) throw deleteError
       }
 
+      const incompleteAccount = accounts.find(
+        (a) => (a.alias.trim() || a.cbu.trim()) && !a.owner_name.trim()
+      )
+      if (incompleteAccount) {
+        toast.error('Completá el nombre del propietario en todas las cuentas con alias o CBU cargado')
+        setSaving(false)
+        return
+      }
+
       const validAccounts = accounts.filter((a) => a.owner_name.trim() && (a.alias.trim() || a.cbu.trim()))
 
       const toUpdate = validAccounts.filter((a) => a.id && !a.id.startsWith('new-'))
@@ -147,7 +156,7 @@ export default function AdminSettingsForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-brand-dark/70 mb-1.5">Número de WhatsApp para contacto *</label>
+        <label className="block text-sm font-medium text-brand-dark/70 mb-1.5">Número de WhatsApp para donaciones en efectivo *</label>
         <input
           className="input-field"
           placeholder="5491112345678"
@@ -155,7 +164,7 @@ export default function AdminSettingsForm() {
           onChange={(e) => setWhatsappNumber(e.target.value)}
         />
         <p className="text-xs text-brand-dark/40 mt-1">
-          Con código de país: 549 + código de área + número (sin 0 ni 15). Todos los botones de &ldquo;Contactar por WhatsApp&rdquo; del sitio usan este número.
+          Con código de país: 549 + código de área + número (sin 0 ni 15). Se usa solo para coordinar donaciones en efectivo. El contacto por cada animal usa el WhatsApp cargado por su rescatista.
         </p>
       </div>
 
@@ -189,7 +198,7 @@ export default function AdminSettingsForm() {
                 Quitar
               </button>
               <div>
-                <label className="block text-xs font-medium text-brand-dark/60 mb-1">Nombre del propietario</label>
+                <label className="block text-xs font-medium text-brand-dark/60 mb-1">Nombre del propietario *</label>
                 <input
                   className="input-field"
                   placeholder="Nombre y apellido"

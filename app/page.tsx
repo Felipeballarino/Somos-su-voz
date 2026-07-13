@@ -56,17 +56,19 @@ export default async function HomePage() {
               </a>
             </div>
           </div>
-
-          <div className="flex-shrink-0">
+          <div
+            className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden  shadow-xl"
+          // style={{ borderColor: 'var(--orange)' }}
+          >
             <Image
-              src="/assets/logo.png"
-              alt="Somos Su Voz"
-              width={280}
-              height={280}
-              className="object-contain drop-shadow-2xl"
-              priority
+              src="/assets/loggo.jpg"
+              alt="Adoptá un animal rescatado"
+              fill
+              className="object-cover"
+              sizes="360px"
             />
           </div>
+
         </div>
 
         {/* Wave */}
@@ -289,7 +291,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── QUIÉNES SOMOS ─────────────────────────────────────── */}
-      <TeamSection />
+      {/* <TeamSection /> */}
 
       {/* ── CTA FINAL ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden py-20" style={{ background: 'linear-gradient(135deg, #E8891A 0%, #C4720F 100%)' }}>

@@ -47,7 +47,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <Image
-            src="/assets/logo.png"
+            src="/assets/logonew.png"
             alt="Somos Su Voz"
             width={44}
             height={44}

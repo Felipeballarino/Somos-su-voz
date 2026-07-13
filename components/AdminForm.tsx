@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { supabase, uploadMedia, getPublicUrl } from '@/lib/supabase'
+import { compressImage, validateMediaFile, MAX_IMAGE_MB, MAX_VIDEO_MB } from '@/lib/media'
 import { Species, Gender, Size } from '@/lib/types'
 
 interface FormData {
@@ -66,6 +67,29 @@ export default function AdminForm() {
   const [form, setForm] = useState<FormData>(defaultForm)
   const [files, setFiles] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
+  const [processingFiles, setProcessingFiles] = useState(false)
+
+  const handleFilesSelected = async (fileList: FileList | null) => {
+    const selected = Array.from(fileList ?? [])
+    if (selected.length === 0) return
+
+    setProcessingFiles(true)
+    try {
+      const processed: File[] = []
+      for (const file of selected) {
+        const compressed = file.type.startsWith('image/') ? await compressImage(file) : file
+        const error = validateMediaFile(compressed)
+        if (error) {
+          toast.error(error)
+          continue
+        }
+        processed.push(compressed)
+      }
+      setFiles(processed)
+    } finally {
+      setProcessingFiles(false)
+    }
+  }
 
   const set = (field: keyof FormData, value: unknown) =>
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -395,15 +419,20 @@ export default function AdminForm() {
             <label className="block cursor-pointer">
               <div className="border-2 border-dashed border-cream-darker rounded-xl p-8 text-center hover:border-orange/50 hover:bg-orange/5 transition-all duration-200">
                 <div className="text-4xl mb-3">📸</div>
-                <p className="text-sm font-medium text-brand-dark/70 mb-1">Tocá para subir fotos</p>
-                <p className="text-xs text-brand-dark/40">JPG, PNG, WebP, MP4 · Máx 50MB por archivo</p>
+                <p className="text-sm font-medium text-brand-dark/70 mb-1">
+                  {processingFiles ? 'Procesando...' : 'Tocá para subir fotos'}
+                </p>
+                <p className="text-xs text-brand-dark/40">
+                  Fotos: máx {MAX_IMAGE_MB}MB (se comprimen automáticamente) · Videos: máx {MAX_VIDEO_MB}MB
+                </p>
               </div>
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
                 multiple
                 className="hidden"
-                onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+                disabled={processingFiles}
+                onChange={(e) => handleFilesSelected(e.target.files)}
               />
             </label>
 

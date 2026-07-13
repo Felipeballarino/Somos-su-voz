@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { supabase, getSettings } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import {
   Animal,
   getAgeText,
@@ -18,15 +18,12 @@ interface PageProps {
 }
 
 export default async function AnimalDetailPage({ params }: PageProps) {
-  const [{ data }, settings] = await Promise.all([
-    supabase
-      .from('animals')
-      .select('*, media:animal_media(*)')
-      .eq('id', params.id)
-      .eq('is_available', true)
-      .single(),
-    getSettings(),
-  ])
+  const { data } = await supabase
+    .from('animals')
+    .select('*, media:animal_media(*)')
+    .eq('id', params.id)
+    .eq('is_available', true)
+    .single()
 
   if (!data) notFound()
 
@@ -147,7 +144,7 @@ export default async function AnimalDetailPage({ params }: PageProps) {
           </div>
 
           {/* WhatsApp */}
-          <WhatsAppButton animal={animal} phone={settings.whatsapp_number} className="w-full justify-center text-base py-4" />
+          <WhatsAppButton animal={animal} phone={animal.rescuer_phone} className="w-full justify-center text-base py-4" />
 
           <p className="text-xs text-center text-brand-dark/40">
             Al hacer clic vas a contactar directamente al rescatista por WhatsApp

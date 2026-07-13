@@ -1,10 +1,9 @@
 import Link from 'next/link'
 
-// TODO: reemplazar con los links reales de los grupos de WhatsApp
 const WA_GROUPS = {
-  volunteers: 'https://chat.whatsapp.com/LINK_VOLUNTARIOS',
-  transport:  'https://chat.whatsapp.com/LINK_TRASLADOS',
-  photos:     'https://chat.whatsapp.com/LINK_FOTOGRAFOS',
+  volunteers: 'https://chat.whatsapp.com/F1eAuXQzBgX9UQqkwDstbA',
+  transport:  'https://chat.whatsapp.com/EvyCwxakPZT2qvStjsvZpm',
+  photos:     'https://chat.whatsapp.com/GjKxOSVU2S0H87ogYCLxrc',
 }
 
 const GROUPS = [
@@ -22,7 +21,7 @@ const GROUPS = [
   },
   {
     emoji: '📸',
-    title: 'Equipo de fotógrafos',
+    title: 'Fotos y edición',
     desc: 'Sacá fotos profesionales a los rescatados para que lleguen a más personas.',
     href: WA_GROUPS.photos,
   },

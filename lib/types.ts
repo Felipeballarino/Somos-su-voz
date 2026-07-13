@@ -90,7 +90,7 @@ export function buildWhatsAppMessage(animal: Animal): string {
   const gender = getGenderText(animal.gender)
   const size = getSizeText(animal.size)
 
-  return `Hola! Vi a *${animal.name}* en Rescatados y me gustaría saber más 🐾\n\n` +
+  return `Hola! Vi a *${animal.name}* en Somos su voz y me gustaría saber más 🐾\n\n` +
     `*${species}* · ${animal.breed ?? 'Raza mixta'} · ${age}\n` +
     `*Sexo:* ${gender} · *Tamaño:* ${size}\n\n` +
     `¿Podés darme más información sobre ${animal.name}?`

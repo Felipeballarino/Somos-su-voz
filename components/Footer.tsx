@@ -10,11 +10,11 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Image
-                src="/assets/logo.png"
+                src="/assets/logonew.png"
                 alt="Somos Su Voz"
                 width={52}
                 height={52}
-                className="object-contain brightness-0 invert"
+                // className="object-contain brightness-0 invert"
               />
               <div>
                 <p className="font-bold text-lg leading-tight">Somos Su Voz</p>
