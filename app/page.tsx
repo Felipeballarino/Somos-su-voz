@@ -6,36 +6,27 @@ import TeamSection from '@/components/TeamSection'
 
 export const dynamic = 'force-dynamic'
 
-// async function getRecentAnimals(): Promise<Animal[]> {
-//   const { data } = await supabase
-//     .from('animals')
-//     .select('*, media:animal_media(*)')
-//     .eq('is_available', true)
-//     .order('created_at', { ascending: false })
-//     .limit(3)
-//   return (data as Animal[]) ?? []
-// }
+// Fallback temporal mientras el fetch a app_settings devuelve vacío en producción (issue del lado de Supabase)
+const FALLBACK_DONATION_WHATSAPP = '5493534289316'
 
-export default async function HomePage() {
-  const rawAnimals = await supabase
+async function getRecentAnimals(): Promise<Animal[]> {
+  const { data } = await supabase
     .from('animals')
     .select('*, media:animal_media(*)')
     .eq('is_available', true)
     .order('created_at', { ascending: false })
     .limit(3)
-  const recentAnimals = (rawAnimals.data as Animal[]) ?? []
+  return (data as Animal[]) ?? []
+}
+
+export default async function HomePage() {
+  const recentAnimals = await getRecentAnimals()
   const bankAccounts = await getBankAccounts()
   const settings = await getSettings()
+  const donationWhatsApp = settings.whatsapp_number || FALLBACK_DONATION_WHATSAPP
 
   return (
     <main>
-      <span style={{ display: 'none' }} id="debug-temp">
-        {JSON.stringify({
-          rawAnimalsError: rawAnimals.error,
-          rawAnimalsStatus: rawAnimals.status,
-          rawAnimalsCount: rawAnimals.data?.length,
-        })}
-      </span>
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #5C6B2E 0%, #3E4A1E 100%)' }}>
         <div className="absolute inset-0 opacity-10 paw-pattern-light" />
@@ -273,7 +264,7 @@ export default async function HomePage() {
                     </div>
                 )}
 
-                {settings.whatsapp_number && (
+                {donationWhatsApp && (
                   <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-cream-darker">
                     <span className="text-xl">💵</span>
                     <div>
@@ -285,9 +276,9 @@ export default async function HomePage() {
               </div>
 
               <div className="flex flex-wrap gap-3 mt-auto">
-                {settings.whatsapp_number && (
+                {donationWhatsApp && (
                   <a
-                    href={`https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent('Hola! Quiero hacer una donación en efectivo, ¿cómo coordinamos?')}`}
+                    href={`https://wa.me/${donationWhatsApp.replace(/\D/g, '')}?text=${encodeURIComponent('Hola! Quiero hacer una donación en efectivo, ¿cómo coordinamos?')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary self-start"
