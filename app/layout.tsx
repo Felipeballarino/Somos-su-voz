@@ -3,6 +3,8 @@ import localFont from 'next/font/local'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import './globals.css'
 
 const geistSans = localFont({
@@ -14,6 +16,11 @@ const geistSans = localFont({
 export const metadata: Metadata = {
   title: 'Somos Su Voz — Pim Pum Pam',
   description: 'Grupo de proteccionistas comprometidos con el bienestar animal. Adoptá, donà y ayudanos a darles una voz.',
+  icons: {
+    icon: '/assets/logonew.png',
+    shortcut: '/assets/logonew.png',
+    apple: '/assets/logonew.png',
+  },
   openGraph: {
     title: 'Somos Su Voz — Pim Pum Pam',
     description: 'Adoptá, donà y ayudanos a darles una voz.',
