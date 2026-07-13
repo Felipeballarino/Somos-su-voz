@@ -17,12 +17,25 @@ async function getRecentAnimals(): Promise<Animal[]> {
 }
 
 export default async function HomePage() {
-  const recentAnimals = await getRecentAnimals()
+  const rawAnimals = await supabase
+    .from('animals')
+    .select('*, media:animal_media(*)')
+    .eq('is_available', true)
+    .order('created_at', { ascending: false })
+    .limit(3)
+  const recentAnimals = (rawAnimals.data as Animal[]) ?? []
   const bankAccounts = await getBankAccounts()
   const settings = await getSettings()
 
   return (
     <main>
+      <span style={{ display: 'none' }} id="debug-temp">
+        {JSON.stringify({
+          rawAnimalsError: rawAnimals.error,
+          rawAnimalsStatus: rawAnimals.status,
+          rawAnimalsCount: rawAnimals.data?.length,
+        })}
+      </span>
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #5C6B2E 0%, #3E4A1E 100%)' }}>
         <div className="absolute inset-0 opacity-10 paw-pattern-light" />
