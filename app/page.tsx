@@ -28,10 +28,16 @@ export default async function HomePage() {
       <span style={{ display: 'none' }} id="debug-temp">
         {JSON.stringify({
           url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-          keyPrefix: (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').slice(0, 20),
+          urlLen: (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').length,
+          key: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+          keyLen: (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').length,
           recentAnimalsCount: recentAnimals.length,
           bankAccountsCount: bankAccounts.length,
           settings,
+          liveTest: await (async () => {
+            const { data, error } = await supabase.from('app_settings').select('whatsapp_number').eq('id', true).single()
+            return { data, error }
+          })(),
         })}
       </span>
       {/* ── HERO ──────────────────────────────────────────────── */}
