@@ -98,7 +98,8 @@ export function buildWhatsAppMessage(animal: Animal): string {
 
 export function buildWhatsAppUrl(phone: string, animal: Animal): string {
   const message = encodeURIComponent(buildWhatsAppMessage(animal))
-  return `https://wa.me/${phone}?text=${message}`
+  const cleanPhone = phone.replace(/\D/g, '')
+  return `https://wa.me/${cleanPhone}?text=${message}`
 }
 
 // ── Hogares de tránsito ──────────────────────────────────────

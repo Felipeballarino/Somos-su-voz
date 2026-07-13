@@ -13,6 +13,7 @@ interface AdminEditAnimalProps {
 
 export default function AdminEditAnimal({ animal, onBack, onSaved }: AdminEditAnimalProps) {
   const [isAvailable, setIsAvailable] = useState(animal.is_available)
+  const [rescuerPhone, setRescuerPhone] = useState(animal.rescuer_phone ?? '')
   const [media, setMedia] = useState<AnimalMedia[]>(
     [...(animal.media ?? [])].sort((a, b) => a.order_index - b.order_index)
   )
@@ -32,11 +33,17 @@ export default function AdminEditAnimal({ animal, onBack, onSaved }: AdminEditAn
   }
 
   const handleSave = async () => {
+    const trimmedPhone = rescuerPhone.replace(/\D/g, '')
+    if (!trimmedPhone) {
+      toast.error('Ingresá un número de WhatsApp')
+      return
+    }
+
     setSaving(true)
     try {
       const { error: updateError } = await supabase
         .from('animals')
-        .update({ is_available: isAvailable })
+        .update({ is_available: isAvailable, rescuer_phone: trimmedPhone })
         .eq('id', animal.id)
       if (updateError) throw updateError
 
@@ -106,6 +113,23 @@ export default function AdminEditAnimal({ animal, onBack, onSaved }: AdminEditAn
         </div>
         <p className="text-xs text-brand-dark/40 mt-1">
           Si no está disponible, deja de aparecer en el listado público.
+        </p>
+      </div>
+
+      {/* WhatsApp del rescatista */}
+      <div>
+        <label className="block text-sm font-medium text-brand-dark/70 mb-1.5">
+          WhatsApp del rescatista
+        </label>
+        <input
+          type="tel"
+          value={rescuerPhone}
+          onChange={(e) => setRescuerPhone(e.target.value)}
+          placeholder="5491112345678"
+          className="input-field w-full"
+        />
+        <p className="text-xs text-brand-dark/40 mt-1">
+          Número con código de país, sin espacios ni signos. Ej: 5491112345678
         </p>
       </div>
 
