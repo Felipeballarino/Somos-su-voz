@@ -17,29 +17,12 @@ async function getRecentAnimals(): Promise<Animal[]> {
 }
 
 export default async function HomePage() {
-  const [recentAnimals, bankAccounts, settings] = await Promise.all([
-    getRecentAnimals(),
-    getBankAccounts(),
-    getSettings(),
-  ])
+  const recentAnimals = await getRecentAnimals()
+  const bankAccounts = await getBankAccounts()
+  const settings = await getSettings()
 
   return (
     <main>
-      <span style={{ display: 'none' }} id="debug-temp">
-        {JSON.stringify({
-          url: process.env.NEXT_PUBLIC_SUPABASE_URL,
-          urlLen: (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').length,
-          key: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-          keyLen: (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '').length,
-          recentAnimalsCount: recentAnimals.length,
-          bankAccountsCount: bankAccounts.length,
-          settings,
-          liveTest: await (async () => {
-            const { data, error } = await supabase.from('app_settings').select('whatsapp_number').eq('id', true).single()
-            return { data, error }
-          })(),
-        })}
-      </span>
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #5C6B2E 0%, #3E4A1E 100%)' }}>
         <div className="absolute inset-0 opacity-10 paw-pattern-light" />
