@@ -1,13 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getBankAccounts, getSettings } from '@/lib/supabase'
-import { Animal, getPrimaryPhoto } from '@/lib/types'
+import { Animal, BankAccount, getPrimaryPhoto } from '@/lib/types'
 import TeamSection from '@/components/TeamSection'
 
 export const dynamic = 'force-dynamic'
 
-// Fallback temporal mientras el fetch a app_settings devuelve vacío en producción (issue del lado de Supabase)
+// Fallback temporal mientras el fetch a app_settings/bank_accounts devuelve vacío en producción (issue del lado de Supabase)
 const FALLBACK_DONATION_WHATSAPP = '5493534289316'
+const FALLBACK_BANK_ACCOUNTS: BankAccount[] = [
+  { id: 'fallback-1', owner_name: 'Silvana Luque', alias: 'ejes.beige.fuga.mp', cbu: null, order_index: 0 },
+  { id: 'fallback-2', owner_name: 'Sofía Ermacora', alias: 'rescate.somossuvoz', cbu: null, order_index: 1 },
+  { id: 'fallback-3', owner_name: 'Vanina Monesterolo', alias: 'vaninamonesterolo', cbu: null, order_index: 2 },
+]
 
 async function getRecentAnimals(): Promise<Animal[]> {
   const { data } = await supabase
@@ -21,7 +26,8 @@ async function getRecentAnimals(): Promise<Animal[]> {
 
 export default async function HomePage() {
   const recentAnimals = await getRecentAnimals()
-  const bankAccounts = await getBankAccounts()
+  const bankAccountsFetched = await getBankAccounts()
+  const bankAccounts = bankAccountsFetched.length > 0 ? bankAccountsFetched : FALLBACK_BANK_ACCOUNTS
   const settings = await getSettings()
   const donationWhatsApp = settings.whatsapp_number || FALLBACK_DONATION_WHATSAPP
 
